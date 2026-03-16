@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Ledger of Baelorgard</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #d4af37;
+            font-family: 'Times New Roman', serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: #262626;
+            padding: 40px;
+            border: 2px solid #3d3d3d;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        h1 {
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            border-bottom: 2px solid #d4af37;
+            padding-bottom: 10px;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            font-style: italic;
+            color: #a0a0a0;
+            margin-bottom: 30px;
+        }
+        .stats {
+            background: #111;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+        #name-list {
+            column-count: 2;
+            column-gap: 40px;
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            padding: 5px 0;
+            border-bottom: 1px solid #333;
+            font-size: 1.1em;
+        }
+        .noble { color: #fff; font-weight: bold; }
+        .merchant { color: #b8860b; }
+        .smallfolk { color: #8b7d6b; }
+        
+        button {
+            background: #d4af37;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+        }
+        button:hover { background: #fff; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>The Ledger of the Fallen</h1>
+    <div class="subtitle">City of Baelorgard - 119,637 Souls Lost</div>
+    
+    <div class="stats">
+        Total Recorded: <span id="count">0</span> / 119,637
+    </div>
+
+    <ul id="name-list">
+        </ul>
+
+    <button onclick="generateMore()">Load Next 500 Names</button>
+</div>
+
+<script>
+    const prefixes = ["Bael", "Val", "Dae", "Aer", "Rho", "Ma", "Ly", "Ga", "Ter", "Alys", "Rhae", "Vis"];
+    const suffixes = ["on", "or", "ys", "arr", "eryn", "ane", "elle", "mond", "ric", "andra", "os", "arys"];
+    const houses = ["Hightower", "Blackwood", "Dayne", "Dondarrion", "Velaryon", "Tarly", "Connington", "Caron"];
+    
+    const commonNames = ["Wat", "Pat", "Tom", "Ned", "Will", "Meg", "Bess", "Rose", "Gendry", "Hake", "Masha", "Lanna", "Gerrick", "Tobas", "Mina", "Dunk", "Eggon"];
+    const traits = ["Stone", "Brown", "Rivers", "Hill", "Tanner", "Smith", "Cooper", "Grey", "the Tall", "Quick", "the Baker", "of the Gate", "One-Ear", "the Drunk"];
+
+    let totalGenerated = 0;
+    const target = 119637;
+
+    function getName() {
+        const rand = Math.random();
+        if (rand < 0.10) {
+            // Noble
+            return `<span class="noble">${prefixes[Math.floor(Math.random() * prefixes.length)]}${suffixes[Math.floor(Math.random() * suffixes.length)]} ${houses[Math.floor(Math.random() * houses.length)]}</span>`;
+        } else if (rand < 0.40) {
+            // Merchant
+            return `<span class="merchant">${commonNames[Math.floor(Math.random() * commonNames.length)]} the ${prefixes[Math.floor(Math.random() * prefixes.length)]}er</span>`;
+        } else {
+            // Smallfolk
+            return `<span class="smallfolk">${commonNames[Math.floor(Math.random() * commonNames.length)]} ${traits[Math.floor(Math.random() * traits.length)]}</span>`;
+        }
+    }
+
+    function generateMore() {
+        const list = document.getElementById('name-list');
+        for (let i = 0; i < 500; i++) {
+            if (totalGenerated >= target) break;
+            const li = document.createElement('li');
+            li.innerHTML = getName();
+            list.appendChild(li);
+            totalGenerated++;
+        }
+        document.getElementById('count').innerText = totalGenerated.toLocaleString();
+    }
+
+    // Initial Load
+    generateMore();
+</script>
+
+</body>
+</html>
